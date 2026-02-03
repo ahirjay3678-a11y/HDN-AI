@@ -1,6 +1,27 @@
 import os, requests
 from flask import Flask, render_template_string, request, session
 
+# Jay bhai, yahan naye timeout settings hain
+API_KEY = "AIzaSyDSfNRv14gfLHV4I1WI4D2JRLoQMOGiAH0"
+
+app = Flask(__name__)
+app.secret_key = "hdn_ai_jay_31943"
+
+def get_ai_response(prompt):
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={API_KEY}"
+    context = "Tera naam HDN AI hai. Tu Jay Solanki ka assistant hai. Bahut fast aur short jawab de."
+    payload = {"contents": [{"parts": [{"text": f"{context}\nUser: {prompt}"}]}]}
+    try:
+        # Timeout badha kar 30 seconds kar diya hai
+        r = requests.post(url, json=payload, timeout=30)
+        return r.json()['candidates'][0]['content']['parts'][0]['text'].replace("\n", "<br>")
+    except Exception as e:
+        return f"Jay bhai, Render jaag raha hai... Ek baar refresh karke 10 second baad puchiye. (Error: {str(e)})"
+
+# Baki HTML code wahi rahega...
+import os, requests
+from flask import Flask, render_template_string, request, session
+
 API_KEY = "AIzaSyDSfNRv14gfLHV4I1WI4D2JRLoQMOGiAH0"
 
 app = Flask(__name__)
